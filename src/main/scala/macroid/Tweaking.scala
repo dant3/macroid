@@ -40,6 +40,11 @@ object CanTweak {
     new CanTweak[Ui[W], T, W] {
       def tweak(ui: Ui[W], t: T) = ui flatMap { w ⇒ canTweak.tweak(w, t).map(_ ⇒ w) }
     }
+
+  implicit def `IntentWithContext is tweakable`[I <: IntentWithContext, T <: Tweak[I]] =
+    new CanTweak[I, T, I] {
+      def tweak(i: I, t: T): Ui[I] = Ui { t(i); i }
+    }
 }
 
 /** This trait defines the tweaking operator (<~) */
